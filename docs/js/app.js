@@ -883,12 +883,17 @@
 
 	var inherits = _inherits;
 
+	function BlobTitle(props) {
+	  if (!props.title) return null;
+	  return React.createElement("h2", null, props.title);
+	}
+
 	function Blob(props) {
-	  return React.createElement("article", {
+	  return React.createElement(React.Fragment, null, React.createElement("article", {
 	    className: "blob"
-	  }, React.createElement("div", {
+	  }, React.createElement(BlobTitle, props), React.createElement("div", {
 	    className: "value"
-	  }, props.value));
+	  }, props.value)));
 	}
 
 	function aggregator(_ref) {
@@ -905,16 +910,17 @@
 	function Drilldown(props) {
 	  var data = props.data,
 	      dimension = props.dimension,
-	      category = props.category,
-	      title = props.title;
+	      category = props.category;
 	  var fData = data.filter(function (_) {
 	    return _[dimension] === category;
 	  });
 	  var value = aggregator({
 	    data: fData
 	  });
+	  var title = category;
 	  return React.createElement(Blob, {
-	    value: value
+	    value: value,
+	    title: title
 	  });
 	}
 
