@@ -900,11 +900,11 @@
 	  var data = _ref.data;
 	  if (data.length === 0) return;
 	  var sum = data.map(function (_) {
-	    return Number.parseFloat(_.score);
+	    return Number.parseFloat(_.Index);
 	  }).reduce(function (p, c) {
 	    return p + c;
 	  }, 0);
-	  return sum / data.length;
+	  return Math.round(sum / data.length);
 	}
 
 	function Drilldown(props) {
@@ -956,7 +956,7 @@
 	  _loadCsv = asyncToGenerator(
 	  /*#__PURE__*/
 	  regenerator.mark(function _callee(_ref) {
-	    var url, response, text, _text$split$map, _text$split$map2, headings, rows, records;
+	    var url, response, text, _text$split$filter$ma, _text$split$filter$ma2, headings, rows, records;
 
 	    return regenerator.wrap(function _callee$(_context) {
 	      while (1) {
@@ -973,9 +973,11 @@
 
 	          case 6:
 	            text = _context.sent;
-	            _text$split$map = text.split('\n').map(function (_) {
+	            _text$split$filter$ma = text.split('\n').filter(function (_) {
+	              return !_.match(/^\s*$/);
+	            }).map(function (_) {
 	              return _.split(',');
-	            }), _text$split$map2 = toArray(_text$split$map), headings = _text$split$map2[0], rows = _text$split$map2.slice(1);
+	            }), _text$split$filter$ma2 = toArray(_text$split$filter$ma), headings = _text$split$filter$ma2[0], rows = _text$split$filter$ma2.slice(1);
 	            records = rows.reduce(function (acc, row) {
 	              var record = headings.reduce(function (rec, col, idx) {
 	                rec[col] = row[idx];
@@ -1081,9 +1083,13 @@
 	        id: "control"
 	      }, React$1__default.createElement("p", null, "Show by:"), React$1__default.createElement("button", {
 	        onClick: function onClick() {
-	          return _this2.setDrill('la');
+	          return _this2.setDrill('Local_Authority');
 	        }
 	      }, "Local Authority"), React$1__default.createElement("button", {
+	        onClick: function onClick() {
+	          return _this2.setDrill('Company');
+	        }
+	      }, "Company"), React$1__default.createElement("button", {
 	        onClick: function onClick() {
 	          return _this2.setDrill(null);
 	        }

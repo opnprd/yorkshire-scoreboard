@@ -52,8 +52,8 @@ export default class Scorecard extends Component {
         </section>
         <section id='control'>
           <p>Show by:</p>
-          <button onClick={ () => this.setDrill('la') }>Local Authority</button>
-          {/* <button onClick={ () => this.setDrill('company') }>Drill by Company</button> */}
+          <button onClick={ () => this.setDrill('Local_Authority') }>Local Authority</button>
+          <button onClick={ () => this.setDrill('Company') }>Company</button>
           <button onClick={ () => this.setDrill(null) }>Clear</button>
         </section>
         { drillDown }
