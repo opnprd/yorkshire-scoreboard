@@ -891,6 +891,33 @@
 	  }, props.value));
 	}
 
+	function aggregator(_ref) {
+	  var data = _ref.data;
+	  if (data.length === 0) return;
+	  var sum = data.map(function (_) {
+	    return Number.parseFloat(_.score);
+	  }).reduce(function (p, c) {
+	    return p + c;
+	  }, 0);
+	  return sum / data.length;
+	}
+
+	function Drilldown(props) {
+	  var data = props.data,
+	      dimension = props.dimension,
+	      category = props.category,
+	      title = props.title;
+	  var fData = data.filter(function (_) {
+	    return _[dimension] === category;
+	  });
+	  var value = aggregator({
+	    data: fData
+	  });
+	  return React.createElement(Blob, {
+	    value: value
+	  });
+	}
+
 	function _arrayWithHoles(arr) {
 	  if (Array.isArray(arr)) return arr;
 	}
@@ -963,18 +990,19 @@
 	  return _loadCsv.apply(this, arguments);
 	}
 
-	function aggregator(_ref) {
-	  var data = _ref.data;
-	  if (data.length === 0) return;
-	  var sum = data.map(function (_) {
-	    return Number.parseFloat(_.score);
-	  }).reduce(function (p, c) {
-	    return p + c;
-	  }, 0);
-	  return sum / data.length;
+	var heading = "<h1 id=\"yorkshire-scorecard\">Yorkshire Scorecard</h1>\n";
+
+	function onlyUnique(value, index, self) {
+	  return self.indexOf(value) === index;
 	}
 
-	var heading = "<h1 id=\"yorkshire-scorecard\">Yorkshire Scorecard</h1>\n";
+	function getDrillTexts(_ref) {
+	  var drill = _ref.drill,
+	      data = _ref.data;
+	  return data.map(function (_) {
+	    return _[drill];
+	  }).filter(onlyUnique);
+	}
 
 	var Scorecard =
 	/*#__PURE__*/
@@ -988,18 +1016,53 @@
 
 	    _this = possibleConstructorReturn(this, getPrototypeOf(Scorecard).call(this, props));
 	    _this.state = {
-	      data: []
+	      data: [],
+	      drill: null
 	    };
 	    return _this;
 	  }
 
 	  createClass(Scorecard, [{
+	    key: "setDrill",
+	    value: function setDrill(drill) {
+	      this.setState(function () {
+	        return {
+	          drill: drill
+	        };
+	      });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
-	      var data = this.state.data;
+	      var _this2 = this;
+
+	      var _this$state = this.state,
+	          data = _this$state.data,
+	          drill = _this$state.drill;
 	      var oneNumber = aggregator({
 	        data: data
 	      });
+	      var drillDown = null;
+
+	      if (drill) {
+	        var names = getDrillTexts({
+	          data: data,
+	          drill: drill
+	        });
+	        console.dir(names);
+	        var drills = names.map(function (drillName, i) {
+	          return React$1__default.createElement(Drilldown, {
+	            key: i,
+	            data: data,
+	            dimension: drill,
+	            category: drillName
+	          });
+	        });
+	        drillDown = React$1__default.createElement("section", {
+	          id: "drilldown"
+	        }, drills);
+	      }
+
 	      return React$1__default.createElement(React$1__default.Fragment, null, React$1__default.createElement("header", {
 	        dangerouslySetInnerHTML: {
 	          __html: heading
@@ -1008,7 +1071,21 @@
 	        id: "summary"
 	      }, React$1__default.createElement(Blob, {
 	        value: oneNumber
-	      })));
+	      })), React$1__default.createElement("section", {
+	        id: "control"
+	      }, React$1__default.createElement("button", {
+	        onClick: function onClick() {
+	          return _this2.setDrill('la');
+	        }
+	      }, "Drill by Local Authority"), React$1__default.createElement("button", {
+	        onClick: function onClick() {
+	          return _this2.setDrill('company');
+	        }
+	      }, "Drill by Company"), React$1__default.createElement("button", {
+	        onClick: function onClick() {
+	          return _this2.setDrill(null);
+	        }
+	      }, "Clear drilldown")), drillDown);
 	    }
 	  }, {
 	    key: "loadReport",
