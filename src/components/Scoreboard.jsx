@@ -4,7 +4,6 @@ import Blob from './Blob.jsx';
 import Drilldown from './Drilldown.jsx';
 
 import loadCsv from '../utils/loadCsv.js';
-import aggregator from '../utils/aggregator.js';
 
 import heading from '../content/title.md';
 
@@ -27,6 +26,7 @@ export default class Scorecard extends Component {
   }
 
   render() {
+    const { aggregator } = this.props;
     const { data, drill } = this.state;
     const oneNumber = aggregator({ data });
 
@@ -39,6 +39,7 @@ export default class Scorecard extends Component {
         data={ data }
         dimension={ drill }
         category={ drillName }
+        aggregator={ aggregator }
       />)
       drillDown = <section id='drilldown'>
         { drills }

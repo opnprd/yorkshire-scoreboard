@@ -896,21 +896,11 @@
 	  }, props.value)));
 	}
 
-	function aggregator(_ref) {
-	  var data = _ref.data;
-	  if (data.length === 0) return;
-	  var sum = data.map(function (_) {
-	    return Number.parseFloat(_.Index);
-	  }).reduce(function (p, c) {
-	    return p + c;
-	  }, 0);
-	  return Math.round(sum / data.length);
-	}
-
 	function Drilldown(props) {
 	  var data = props.data,
 	      dimension = props.dimension,
-	      category = props.category;
+	      category = props.category,
+	      aggregator = props.aggregator;
 	  var fData = data.filter(function (_) {
 	    return _[dimension] === category;
 	  });
@@ -1044,6 +1034,7 @@
 	    value: function render() {
 	      var _this2 = this;
 
+	      var aggregator = this.props.aggregator;
 	      var _this$state = this.state,
 	          data = _this$state.data,
 	          drill = _this$state.drill;
@@ -1063,7 +1054,8 @@
 	            key: i,
 	            data: data,
 	            dimension: drill,
-	            category: drillName
+	            category: drillName,
+	            aggregator: aggregator
 	          });
 	        });
 	        drillDown = React$1__default.createElement("section", {
@@ -1143,6 +1135,17 @@
 	  return Scorecard;
 	}(React$1.Component);
 
+	function aggregator(_ref) {
+	  var data = _ref.data;
+	  if (data.length === 0) return;
+	  var sum = data.map(function (_) {
+	    return Number.parseFloat(_.Index);
+	  }).reduce(function (p, c) {
+	    return p + c;
+	  }, 0);
+	  return Math.round(sum / data.length);
+	}
+
 	var url = './reports.csv';
 	function initialise() {
 	  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -1150,7 +1153,8 @@
 	      appRootId = _ref$appRootId === void 0 ? 'app' : _ref$appRootId;
 
 	  ReactDOM.render(React$1__default.createElement(Scorecard, {
-	    url: url
+	    url: url,
+	    aggregator: aggregator
 	  }), document.getElementById(appRootId));
 	}
 
