@@ -1079,19 +1079,15 @@
 	        value: oneNumber
 	      })), React$1__default.createElement("section", {
 	        id: "control"
-	      }, React$1__default.createElement("button", {
+	      }, React$1__default.createElement("p", null, "Show by:"), React$1__default.createElement("button", {
 	        onClick: function onClick() {
 	          return _this2.setDrill('la');
 	        }
-	      }, "Drill by Local Authority"), React$1__default.createElement("button", {
-	        onClick: function onClick() {
-	          return _this2.setDrill('company');
-	        }
-	      }, "Drill by Company"), React$1__default.createElement("button", {
+	      }, "Local Authority"), React$1__default.createElement("button", {
 	        onClick: function onClick() {
 	          return _this2.setDrill(null);
 	        }
-	      }, "Clear drilldown")), drillDown);
+	      }, "Clear")), drillDown);
 	    }
 	  }, {
 	    key: "loadReport",
